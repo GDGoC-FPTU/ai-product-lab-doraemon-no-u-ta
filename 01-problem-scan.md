@@ -153,12 +153,3 @@
 
 ---
 
-## 🗳️ Recommended Problem for Phase 3 Deep-Dive
-
-| Card | Strengths | Watch out for |
-|---|---|---|
-| **#1 Vinmec** | Clear metric, high time savings for doctors | Medical data is sensitive — HITL is mandatory, AI must never auto-send |
-| **#2 Xanh SM** | Fixed workflow, easy to prototype, worked example available | Needs mock GPS + charging station API for testing |
-| **#3 Vinhomes** | Simple text input, easiest to test immediately with an LLM | Requires a clear complaint taxonomy before building |
-
-> **Recommendation:** If your team wants to build and test the Phase 4 prototype quickly, **Card #3 (Vinhomes)** is the easiest — it only needs Vietnamese text input and no complex mock APIs.
