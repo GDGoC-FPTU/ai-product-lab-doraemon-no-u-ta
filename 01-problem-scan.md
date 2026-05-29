@@ -35,18 +35,18 @@
 │ Subsidiary: [x] Vinmec                                      │
 │                                                             │
 │ Who is in pain (Actor)?                                     │
-│   Attending physicians (overloaded, frequently complain),   │
-│   Patients (waiting for paperwork before leaving).          │
+│   Attending physicians (overloaded, frequent complaints)    │
+│   Patients (long waits for paperwork before leaving).       │
 │                                                             │
 │ Current manual workflow (5 steps):                          │
-│   1. Doctor opens the electronic medical record (EMR)       │
-│   ──> 2. Reviews all clinical notes, lab results, imaging   │
+│   1. Doctor opens the electronic medical record             │
+│   ──> 2. Reviews all clinical notes, lab results, imagings  │
 │   ──> 3. Manually writes discharge summary in Word/HIS      │
 │   ──> 4. Department head reviews and signs off              │
 │   ──> 5. Document is printed and handed to patient          │
 │                                                             │
 │ Slowest / most error-prone step?                            │
-│   Steps 2–3 (20–25 min/case)                             │
+│   Steps 2–3 (20–25 min/case)                                │
 │   — Doctor must consolidate scattered data from multiple    │
 │     sources; information is often missed or inconsistent.   │
 │                                                             │
@@ -55,11 +55,11 @@
 │   and draft a patient-friendly discharge summary.           │
 │                                                             │
 │ Success metric (with numbers)?                              │
-│   Reduce drafting time from 25 min ──> under 5 min.         │
-│   ≥ 85% of AI drafts approved by doctors with no major      │
+│   Reduce drafting time from 25 min to under 5 min.          │
+│   ≥ 85% of AI drafts are approved by doctors with no major  |
 │   edits required.                                           │
 │                                                             │
-│ Quick Architecture: [x] LLM Feature                        │
+│ Quick Architecture: [x] LLM Feature                         │
 │   (Structured draft from existing data; doctor reviews)     │
 └─────────────────────────────────────────────────────────────┘
 ```
@@ -74,10 +74,10 @@
 │                                                             │
 │ Problem: When Xanh SM drivers report low battery on the     │
 │ road, dispatchers manually look up available charging       │
-│ stations and compose routing instructions — ~80 cases/day,  │
+│ stations and compose routing instructions. ~80 cases/day,   │
 │ taking 12–15 min each.                                      │
 │                                                             │
-│ Subsidiary: [x] Xanh SM (GSM)                              │
+│ Subsidiary: [x] Xanh SM (GSM)                               │
 │                                                             │
 │ Who is in pain (Actor)?                                     │
 │   Drivers (stranded on the road, unable to pick up riders), │
@@ -86,25 +86,25 @@
 │ Current manual workflow (5 steps):                          │
 │   1. Driver calls dispatch hotline to report low battery    │
 │   ──> 2. Dispatcher locates vehicle GPS on internal map     │
-│   ──> 3. Manually checks VinFast stations for open slots    │
+│   ──> 3. Manually checks VinFast stations for empty slots   │
 │   ──> 4. Composes routing message and sends via Driver App  │
 │   ──> 5. Calls roadside rescue if battery is below 5%       │
 │                                                             │
 │ Slowest / most error-prone step?                            │
-│   Steps 3–4 (10–12 min/case)                             │
-│   — Risk of recommending wrong charger type (CCS2 vs GBT)  │
-│     for the specific vehicle model (VF5 / VF8 / VF9).      │
+│   Steps 3–4 (10–12 min/case)                                │
+│   — Risk of recommending wrong charger type (CCS2 vs GBT)   │
+│     for the specific vehicle model (VF5 / VF8 / VF9).       │
 │                                                             │
 │ Where can AI step in?                                       │
 │   Steps 3–4: Auto-pull vehicle GPS + available stations,    │
 │   draft a clear Vietnamese routing message for the driver.  │
 │                                                             │
 │ Success metric (with numbers)?                              │
-│   Reduce handling time from 15 min ──> under 3 min.         │
+│   Reduce handling time from 15 min to under 3 min.          │
 │   ≥ 98% of guidance matches the correct charger type        │
 │   for the vehicle model.                                    │
 │                                                             │
-│ Quick Architecture: [x] LLM Feature                        │
+│ Quick Architecture: [x] LLM Feature                         │
 │   (Fixed workflow, high risk if AI sends without approval)  │
 └─────────────────────────────────────────────────────────────┘
 ```
@@ -119,7 +119,7 @@
 │                                                             │
 │ Problem: Resident complaints submitted via the Vinhomes     │
 │ Resident App are manually classified and routed to the      │
-│ correct building management team — average response time    │
+│ correct building management team. Average response time     │
 │ is 12 hours/ticket, with 50–80 tickets/day.                 │
 │                                                             │
 │ Subsidiary: [x] Vinhomes                                    │
@@ -135,18 +135,18 @@
 │   ──> 4. Team receives and begins handling                  │
 │                                                             │
 │ Slowest / most error-prone step?                            │
-│   Steps 2–3 (8–10 min/ticket, backlog of 50–80/day)      │
+│   Steps 2–3 (8–10 min/ticket, backlog of 50–80/day)         │
 │   — Easy to misroute: technical vs. cleaning vs. security.  │
 │                                                             │
 │ Where can AI step in?                                       │
 │   Steps 2–3: Auto-classify complaint category + route to    │
-│   the correct team, with priority tag (urgent / standard).  │
+│   the correct team, with priority tag (urgent/standard).    │
 │                                                             │
 │ Success metric (with numbers)?                              │
-│   Reduce response time from 12 hours ──> under 30 minutes. │
-│   ≥ 90% classification accuracy to the correct department. │
+│   Reduce response time from 12 hours to under 30 minutes.   │
+│   ≥ 90% classification accuracy to the correct department.  │
 │                                                             │
-│ Quick Architecture: [x] LLM Feature                        │
+│ Quick Architecture: [x] LLM Feature                         │
 │   (Text classification + routing; no autonomous agent)      │
 └─────────────────────────────────────────────────────────────┘
 ```
