@@ -63,11 +63,11 @@ Hãy sử dụng **4 Lenses** dưới đây để quét qua hoạt động vận
 ### 📝 List bài toán của tôi:
 | # | Subsidiary (VinFast/Xanh SM...) | Lens | Mô tả ngắn bài toán |
 |---|----------------------------------|------|---------------------|
-| 1 | | | |
-| 2 | | | |
-| 3 | | | |
-| 4 | | | |
-| 5 | | | |
+| 1 | **Vinmec** | Pain từ người khác | Bác sĩ mất 20–30 phút/bệnh nhân soạn tóm tắt hồ sơ xuất viện thủ công, gây quá tải và sai sót khi lượng bệnh nhân cao điểm vượt 200 ca/ngày. |
+| 2 | **Vinhomes** | AI-upgrade | Chatbot CSKH Vinhomes phản hồi rập khuôn, không xử lý được khiếu nại phức tạp về phí dịch vụ — thời gian phản hồi trung bình 12 tiếng, CSAT chỉ 62%. |
+| 3 | **Xanh SM** | Tốn thời gian | Điều phối viên mất 10–15 phút/chuyến để ghép tài xế phù hợp cho các chuyến xe dài tuyến liên tỉnh vì phải tra cứu 3 hệ thống riêng lẻ. |
+| 4 | **VinFast** | Lặp lại | Kỹ thuật viên phân loại thủ công hàng nghìn mã lỗi OBD2 từ xe EV gửi về hằng ngày — trung bình 8 phút/xe, 500+ xe/ngày chỉ riêng Hà Nội. |
+| 5 | **Vinpearl** | Tốn thời gian | Nhân viên lễ tân Vinpearl mất 5–8 phút/cuộc gọi xử lý yêu cầu nâng cấp phòng/dịch vụ đặc biệt do phải tra cứu đồng thời nhiều hệ thống PMS, CRM và inventory. |
 
 ---
 
@@ -77,24 +77,87 @@ Chọn **top 3 bài toán** từ danh sách trên và hoàn thiện **3 Quick Pr
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│ QUICK PROBLEM CARD #___                                     │
+│ QUICK PROBLEM CARD #1                                       │
 │                                                             │
-│ Bài toán (1 câu): ________________________________________  │
+│ Bài toán: Bác sĩ Vinmec mất 20–30 phút soạn tóm tắt hồ sơ  │
+│ xuất viện thủ công cho từng bệnh nhân.                       │
 │ Công ty thành viên: [ ] VinFast  [ ] Xanh SM  [ ] Vinhomes  │
-│                     [ ] Vinmec   [ ] Khác (Ghi rõ)________  │
+│                     [x] Vinmec   [ ] Khác                   │
 │                                                             │
-│ Ai đang đau (Actor)? ______________________________________ │
+│ Ai đang đau? Bác sĩ điều trị (quá tải giấy tờ, giờ hành    │
+│ chính bị chiếm bởi tác vụ hành chính).                      │
 │                                                             │
-│ Workflow thủ công hiện tại (3-5 bước):                      │
-│   1. ___ ──> 2. ___ ──> 3. ___ ──> 4. ___                   │
+│ Workflow thủ công hiện tại (4 bước):                        │
+│   1. Tra cứu hồ sơ bệnh án trong HIS (Hospital Info System) │
+│   ──> 2. Đọc và tổng hợp kết quả xét nghiệm + chẩn đoán    │
+│   ──> 3. Soạn tay văn bản tóm tắt theo mẫu bệnh viện        │
+│   ──> 4. Ký và nộp cho bộ phận hành chính                   │
 │                                                             │
-│ Bước nào tốn thời gian/lỗi nhất? ___ (⏱ ___ phút/lượt)      │
-│ AI có thể nhảy vào hỗ trợ ở bước nào? _____________________ │
+│ Bước nào tốn nhất? Bước 2-3 (⏱ 20 phút/bệnh nhân)           │
+│ AI có thể nhảy vào hỗ trợ ở bước nào? Bước 2-3:             │
+│ AI đọc dữ liệu HIS → tự động soạn draft tóm tắt             │
 │                                                             │
-│ Đo thành công bằng gì (Metric có số)? ______________________ │
-│   VD: "Giảm thời gian soạn phản hồi từ 10 min ──> under 2 min"│
+│ Đo thành công bằng gì (Metric có số)?                        │
+│   Giảm thời gian soạn từ 25 phút ──> dưới 5 phút/bệnh nhân  │
+│   Độ chính xác thông tin đạt ≥ 98% (bác sĩ xác nhận)        │
 │                                                             │
-│ Quick Architecture: [ ] No AI  [ ] Rule  [ ] LLM  [ ] Agent │
+│ Quick Architecture: [ ] No AI  [ ] Rule  [x] LLM  [ ] Agent │
+└─────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────┐
+│ QUICK PROBLEM CARD #2                                       │
+│                                                             │
+│ Bài toán: Chatbot CSKH Vinhomes phản hồi rập khuôn, không   │
+│ phân loại và xử lý được khiếu nại phí dịch vụ phức tạp.     │
+│ Công ty thành viên: [ ] VinFast  [ ] Xanh SM  [x] Vinhomes  │
+│                     [ ] Vinmec   [ ] Khác                   │
+│                                                             │
+│ Ai đang đau? Cư dân Vinhomes (chờ phản hồi 12 tiếng),       │
+│ nhân viên CSKH (xử lý lặp đi lặp lại cùng một loại câu hỏi).│
+│                                                             │
+│ Workflow thủ công hiện tại (4 bước):                        │
+│   1. Cư dân gửi khiếu nại qua App Vinhomes Resident         │
+│   ──> 2. CSKH đọc thủ công và phân loại (phí/hạ tầng/tiện ích)│
+│   ──> 3. Tra cứu hợp đồng/quy định liên quan để soạn trả lời │
+│   ──> 4. Gửi phản hồi + Escalate lên bộ phận chuyên môn     │
+│                                                             │
+│ Bước nào tốn nhất? Bước 2-3 (⏱ 12 tiếng/ticket)             │
+│ AI có thể nhảy vào hỗ trợ ở bước nào? Bước 2-3:             │
+│ AI phân loại ticket → trả lời tự động các loại phổ biến      │
+│                                                             │
+│ Đo thành công bằng gì (Metric có số)?                        │
+│   Giảm thời gian phản hồi từ 12 tiếng ──> dưới 15 phút      │
+│   Tỉ lệ tự động xử lý không cần human ≥ 70% ticket          │
+│                                                             │
+│ Quick Architecture: [ ] No AI  [ ] Rule  [x] LLM  [ ] Agent │
+└─────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────┐
+│ QUICK PROBLEM CARD #3                                       │
+│                                                             │
+│ Bài toán: Kỹ thuật viên VinFast phân loại thủ công mã lỗi   │
+│ OBD2 từ 500+ xe EV gửi về hằng ngày.                        │
+│ Công ty thành viên: [x] VinFast  [ ] Xanh SM  [ ] Vinhomes  │
+│                     [ ] Vinmec   [ ] Khác                   │
+│                                                             │
+│ Ai đang đau? Kỹ thuật viên bộ phận After-Sales VinFast      │
+│ (không kịp xử lý, bỏ sót lỗi nghiêm trọng).                 │
+│                                                             │
+│ Workflow thủ công hiện tại (4 bước):                        │
+│   1. Xe tự động gửi log lỗi OBD2 về hệ thống VinFast        │
+│   ──> 2. KTV đọc từng mã lỗi, tra cứu tài liệu kỹ thuật     │
+│   ──> 3. Phân loại mức độ: Khẩn cấp / Cần bảo dưỡng / Bình thường│
+│   ──> 4. Tạo phiếu tư vấn và liên hệ chủ xe                 │
+│                                                             │
+│ Bước nào tốn nhất? Bước 2-3 (⏱ 8 phút/xe, 500+ xe/ngày)     │
+│ AI có thể nhảy vào hỗ trợ ở bước nào? Bước 2-3:             │
+│ AI đọc log OBD2 → phân loại mức độ → draft phiếu tư vấn     │
+│                                                             │
+│ Đo thành công bằng gì (Metric có số)?                        │
+│   Giảm thời gian phân loại từ 8 phút ──> dưới 30 giây/xe    │
+│   Tỉ lệ phân loại đúng mức độ nghiêm trọng ≥ 95%            │
+│                                                             │
+│ Quick Architecture: [ ] No AI  [ ] Rule  [x] LLM  [ ] Agent │
 └─────────────────────────────────────────────────────────────┘
 ```
 
