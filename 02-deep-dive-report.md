@@ -30,26 +30,47 @@
 
 ## 3.1. Current-State Workflow
 
-Quy trình xác nhận lịch hẹn thủ công hiện tại tại Vinmec:
+Quy trình xác nhận lịch hẹn thủ công hiện tại tại Vinmec (thực hiện mỗi ngày làm việc):
 
 ```
-┌──────────────────┐     ┌──────────────────┐     ┌──────────────────┐     ┌──────────────────┐
-│ Bước 1           │     │ Bước 2           │     │ Bước 3           │     │ Bước 4           │
-│ Xuất danh sách   │     │ Lễ tân gọi điện  │     │ Ghi nhận phản    │     │ Cập nhật lịch    │
-│ lịch hẹn từ HIS  │ ──→ │ từng bệnh nhân   │ ──→ │ hồi: xác nhận /  │ ──→ │ bác sĩ nếu có   │
-│                  │     │ để nhắc nhở      │     │ hủy / đổi giờ   │     │ thay đổi         │
-│ Ai: Lễ tân       │     │ Ai: Lễ tân       │     │ Ai: Lễ tân       │     │ Ai: Lễ tân       │
-│ ⏱ 10 phút/ngày   │     │ ⏱ 4 phút/cuộc 🔴 │     │ ⏱ 1 phút/ca 🔴   │     │ ⏱ 2 phút/ca      │
-│ Tool: HIS        │     │ Tool: Điện thoại │     │ Tool: Excel      │     │ Tool: HIS        │
-│ Out: File danh   │     │ Out: Trạng thái  │     │ Out: Ghi chú thủ │     │ Out: Lịch cập    │
-│ sách 300 bệnh    │     │ xác nhận miệng   │     │ công             │     │ nhật             │
-│ nhân             │     │                  │     │                  │     │                  │
-└──────────────────┘     └──────────────────┘     └──────────────────┘     └──────────────────┘
+[16:00 hôm trước]                               [7:30 – 11:30 hôm sau]
+        │                                                  │
+        ▼                                                  ▼
+┌──────────────────┐     ┌──────────────────┐     ┌────────────────────────────────────────────────────────┐
+│ Bước 1           │     │ Bước 2           │     │ Bước 3 — Gọi điện xác nhận  🔴 BOTTLENECK             │
+│ Xuất & lọc danh  │     │ Chia danh sách   │     │                                                        │
+│ sách lịch hẹn    │ ──→ │ cho 3 lễ tân     │ ──→ │  Lần 1: Gọi từng BN (~3 phút/cuộc)                   │
+│ ngày mai từ HIS  │     │ (~100 ca/người)  │     │     ├─ Bắt máy → xác nhận → ghi "XN" vào Excel       │
+│                  │ 🔄  │ Ghi tay phân     │ 🔄  │     └─ Không bắt máy → ghi chú, chờ 30 phút          │
+│ Ai: Lễ tân       │     │ công ai gọi ai   │     │                                                        │
+│ ⏱ 15 phút/ngày   │     │ Ai: Lễ tân       │     │  Lần 2 (nếu không bắt máy lần 1):                    │
+│ Tool: HIS        │     │ ⏱ 10 phút/ngày   │     │     ├─ Bắt máy → xác nhận / hủy / đổi giờ            │
+│ Out: File Excel  │     │ Tool: Excel      │     │     └─ Vẫn không bắt → ghi "KLL" (không liên lạc)    │
+│ 300 bệnh nhân    │     │ Out: 3 danh sách │     │                                                        │
+└──────────────────┘     └──────────────────┘     │ Ai: 3 Lễ tân song song                                │
+                                                  │ ⏱ ~3–5 phút/BN × 300 ca = 15–25 giờ/ngày              │
+                                                  │ Tool: Điện thoại bàn + Excel riêng từng người          │
+                                                  │ Out: 3 file Excel rời nhau, chưa tổng hợp              │
+                                                  └────────────────────────────────────────────────────────┘
+                                                                          │
+                                                                          ▼ 🔄 Handoff
+                                         ┌──────────────────┐     ┌──────────────────┐     ┌──────────────────┐
+                                         │ Bước 6           │     │ Bước 5           │     │ Bước 4           │
+                                         │ Xử lý no-show    │     │ Cập nhật HIS +   │     │ Tổng hợp 3 file  │
+                                         │ thực tế trong    │ ←── │ thông báo bác sĩ │ ←── │ Excel thành 1    │
+                                         │ ngày: gọi thêm  │     │ nếu có hủy/đổi   │     │ bảng chung       │
+                                         │ 1 lần, chờ 15'  │     │                  │ 🔄  │                  │
+                                         │ Ai: Lễ tân       │     │ Ai: Lễ tân       │     │ Ai: Lễ tân       │
+                                         │ ⏱ ~2 phút/ca 🔴  │     │ ⏱ ~2 phút/thay  │     │ ⏱ 20 phút/ngày   │
+                                         │ Tool: Điện thoại │     │ đổi × N ca 🔴    │     │ Tool: Excel      │
+                                         │ Out: Log no-show │     │ Tool: HIS        │     │ Out: Báo cáo     │
+                                         │ báo bác sĩ chờ  │     │ Out: HIS updated │     │ tổng xác nhận    │
+                                         └──────────────────┘     └──────────────────┘     └──────────────────┘
 
-🔴 = Bottleneck (chiếm >90% tổng thời gian)
-🔄 Handoff: Bước 1→2 (lễ tân nhận file từ HIS), Bước 3→4 (ghi chú Excel → cập nhật HIS thủ công)
+🔴 = Bottleneck  |  🔄 = Handoff (điểm chuyển giao dữ liệu giữa người / hệ thống)
 
-⏱ Tổng thời gian: ~(4 + 1) phút × 300 bệnh nhân = 25 giờ/ngày → cần 3 lễ tân làm full-time chỉ để gọi điện xác nhận.
+Tổng cộng: 6 bước, hoàn toàn thủ công, phân tán qua 3 nhân viên và 2 hệ thống (điện thoại + Excel + HIS).
+⏱ Tổng thời gian xử lý: ~25–30 giờ/ngày → cần 3 lễ tân full-time chỉ để gọi điện, chưa tính tiếp đón quầy.
 ```
 
 ---
@@ -59,8 +80,8 @@ Quy trình xác nhận lịch hẹn thủ công hiện tại tại Vinmec:
 | Field | Nội dung chi tiết |
 |---|---|
 | **1. Actor / Operator** | Lễ tân bệnh viện (3 nhân viên) tại bộ phận Đặt lịch & Tiếp nhận của Vinmec. Làm việc 7:00–17:00, phụ trách đồng thời cả tiếp đón tại quầy và gọi xác nhận lịch. |
-| **2. Current Workflow** | Mỗi chiều, lễ tân xuất danh sách lịch hẹn ngày hôm sau từ HIS (~300 ca). Từ 14:00–17:00, 3 lễ tân thay nhau gọi điện thoại từng bệnh nhân để nhắc lịch. Ghi nhận kết quả vào Excel (xác nhận / hủy / cần đổi giờ). Cuối ca cập nhật thay đổi lên HIS và thông báo cho bác sĩ liên quan. Toàn bộ 5 bước thủ công, không có hệ thống tự động. |
-| **3. Bottleneck** | Bước gọi điện (Bước 2): 4 phút/cuộc × 300 bệnh nhân = 1.200 phút = 20 giờ/ngày. Ngoài ra, ghi chép vào Excel rời rạc dẫn đến sai sót khi cập nhật ngược lên HIS (~5 lỗi cập nhật/ngày). Bác sĩ không được thông báo kịp thời khi có hủy lịch đột xuất → lãng phí slot khám. |
+| **2. Current Workflow** | 6 bước thủ công hoàn toàn: (1) Lễ tân xuất danh sách ~300 ca từ HIS lúc 16:00 hôm trước. (2) Chia tay danh sách cho 3 lễ tân (~100 ca/người). (3) Mỗi lễ tân gọi điện từng bệnh nhân 7:30–11:30, gọi đến 2 lần nếu không bắt máy, ghi kết quả vào 3 file Excel riêng. (4) Tổng hợp 3 file thành 1 bảng chung. (5) Cập nhật từng thay đổi (hủy/đổi) vào HIS và thông báo bác sĩ. (6) Trong ngày nếu bệnh nhân no-show vẫn phải gọi thêm 1 lần. Không có bước nào tự động. |
+| **3. Bottleneck** | Bước 3 (gọi điện): 3–5 phút/cuộc × 300 ca = tối đa 25 giờ/ngày — chiếm >85% tổng thời gian. Bước 5 (cập nhật HIS): nhập tay từ Excel sang HIS dễ sai sót (~5 lỗi/ngày), dữ liệu trễ khiến bác sĩ không biết slot nào vừa bị hủy. Bước 4 (tổng hợp Excel): 3 file rời nhau dễ gây xung đột, mất 20 phút/ngày để merge. |
 | **4. Business Impact** | Tỉ lệ no-show hiện tại ~18% (~54 ca/ngày). Mỗi slot khám trung bình 500.000 VND → lãng phí ~27 triệu VND doanh thu tiềm năng/ngày. 3 lễ tân full-time bị chiếm toàn bộ thời gian chiều → không thể hỗ trợ tiếp đón tại quầy, gây ùn ứ 15:00–17:00. |
 | **5. Success Metric** | 1. Giảm tỉ lệ no-show từ 18% → dưới 6% trong 60 ngày sau triển khai. 2. Giải phóng ≥ 18 giờ lễ tân/ngày (từ gọi điện sang tác vụ tiếp đón). 3. Tỉ lệ phản hồi xác nhận lịch của bệnh nhân qua tin nhắn đạt ≥ 80%. |
 | **6. Operational Boundary** | **AI được phép:** Gửi tin nhắn Zalo/SMS xác nhận lịch hẹn dạng [DRAFT_ONLY], đọc và phân loại phản hồi của bệnh nhân (xác nhận / cần hỗ trợ), tự động cập nhật trạng thái "đã xác nhận" vào HIS. **TUYỆT ĐỐI CẤM:** AI không được tự hủy lịch hẹn; không được tự đổi giờ/bác sĩ; không được trả lời câu hỏi y tế (triệu chứng, thuốc, chẩn đoán). **Bắt buộc HITL:** Mọi yêu cầu hủy lịch hoặc đổi lịch → escalate ngay cho lễ tân xử lý. |
