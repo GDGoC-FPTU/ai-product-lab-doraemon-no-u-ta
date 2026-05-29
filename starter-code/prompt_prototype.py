@@ -1,6 +1,6 @@
 """
 Day 2 — AI Product Scoping (Vin Smart Future)
-Lightweight Prompt Boundary Prototyping
+Lightweight Prompt Boundary Prototyping (Vinmec Appointment Assistant)
 
 Use case: Vinmec — AI Appointment Confirmation Bot
 Bai toan: Tu dong nhan tin xac nhan lich hen benh nhan, giam ti le no-show tu 18% xuong duoi 5%.
