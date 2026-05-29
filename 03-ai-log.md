@@ -32,7 +32,7 @@ Khi tôi hỏi số liệu tỉ lệ no-show thực tế của Vinmec, AI trả 
 
 Tôi thêm chỉ thị vào prompt:
 
-> *"Mỗi khi đưa ra con số thống kê, hãy ghi rõ: đây là số liệu từ nguồn cụ thể nào, hay chỉ là ước tính suy diễn. Nếu là ước tính, gắn nhãn [ƯỚC TÍNH] trước con số."*
+> *"Mỗi khi đưa ra con số thống kê, hãy ghi rõ: đây là số liệu từ nguồn cụ thể nào, hay chỉ là ước tính suy diễn. Nếu là ước tính, gắn nhãn ƯỚC TÍNH trước con số."*
 
 Sau điều chỉnh, AI bắt đầu phân biệt rõ ràng giữa số liệu có nguồn và ước tính, giúp tôi tự tin hơn khi biết phần nào cần kiểm chứng thêm.
 
